@@ -1,0 +1,58 @@
+{# #######################
+  header.html
+##########################
+
+This block gives the introduction content at the top of each report.
+That is, the page title, welcome message, details of where the report
+was generated and the button that launches the welcome tour.
+
+Simplified w.r.t. default:
+- no welcome tour offering
+- no logo
+
+#}
+
+{% if config.title is not none or config.subtitle is not none %}
+<h1>
+  {{ config.title if config.title is not none }}
+  {{ '<br>' if config.title is not none and config.subtitle is not none }}
+  {{ '<small>'+config.subtitle+'</small>' if config.subtitle is not none }}
+</h1>
+{% endif %}
+
+{% if config.report_comment and config.report_comment | length > 0 %}
+<blockquote class="report_comment">{{ config.report_comment }}</blockquote>
+{% endif %}
+
+{% if config.report_header_info and config.report_header_info | length > 0 %}
+<div class="well">
+  <dl class="dl-horizontal" style="margin-bottom:0;">
+    {% for d in config.report_header_info %}{% for k, v in d.items() %}
+      <dt>{{ k }}</dt><dd>{{ v }}</dd>
+    {% endfor %}{% endfor %}
+  </dl>
+</div>
+{% endif %}
+
+<noscript>
+  <div class="alert alert-danger">
+    <h4>JavaScript Disabled</h4>
+    <p>MultiQC reports use JavaScript for plots and toolbox functions. It looks like
+    you have JavaScript disabled in your web browser. Please note that many of the report
+    functions will not work as intended.</p>
+  </div>
+</noscript>
+
+<div class="alert alert-warning mqc_loading_warning" style="display:none;"><span class="glyphicon glyphicon-time"></span> &nbsp;Loading report..</div>
+
+{% if config.sample_names_rename_buttons | length > 0 %}
+<p id="mqc_sname_switches_txt">Change sample names:
+  <span class="btn-group btn-group-sm" role="group" id="mqc_sname_switches">
+    {% for sn_t in config.sample_names_rename_buttons %}
+      <button type="button" class="btn btn-primary mqc_sname_switches {% if loop.index == 1 %}active{% endif %}" data-index="{{ loop.index - 1 }}">{{ sn_t }}</button>
+    {%- endfor %}
+  </span>
+</p>
+{% endif %}
+
+<hr id="mqc_header_hr">

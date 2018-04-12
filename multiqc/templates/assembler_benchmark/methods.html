@@ -1,0 +1,37 @@
+{# #######################
+  methods.html
+###########################}
+
+{% if report.modules_output[0].anchor == 'ab_methods_section' %}
+  {{"Authors: "}} {{ report.modules_output[0].sections[0]['content']['authors'] }}
+  <div id="abstract" class="mqc-module-section">
+     <h2>{{"Abstract"}}</h2>
+     {{ report.modules_output[0].sections[0]['content']['abstract'] }}
+  </div>
+
+<div id="analysis_dirs_wrapper">
+  <p>Report generated on {{ config.creation_date }} based on data in:
+  {% if config.analysis_dir | length == 1 %}<code class="mqc_analysis_path">{{ config.analysis_dir[0] }}</code>
+  {% else %}
+  <ul>
+    {% for d in config.analysis_dir %}
+    <li><code class="mqc_analysis_path">{{ d }}</code></li>
+    {%  endfor %}
+  </ul>
+  {% endif %}
+</div>
+
+  <div id="methods" class="mqc-module-section">
+    <h2>{{"Methods"}}</h2>
+    <h3>{{"Readset analysis"}}</h3>
+    {{ report.modules_output[0].sections[0]['content']['readset_quality'] }}
+    <h3>{{"Assembly pipelines"}}</h3>
+    {{ report.modules_output[0].sections[0]['content']['pipelines'] }}
+    <h3>{{"Assembly analysis"}}</h3>
+    {{ report.modules_output[0].sections[0]['content']['assembly_quality'] }}
+
+  </div>
+  <div id="results" class="mqc-module-section">
+    <h2>{{"Results"}}</h2>
+  </div>
+{% endif %}

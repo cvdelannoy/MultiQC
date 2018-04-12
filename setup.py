@@ -24,7 +24,7 @@ MultiQC was written by Phil Ewels (http://phil.ewels.co.uk) at SciLifeLab Sweden
 from setuptools import setup, find_packages
 import sys
 
-version = '1.6dev'
+version = '1.5dev'
 dl_version = 'master' if 'dev' in version else 'v{}'.format(version)
 
 print("""-----------------------------------
@@ -38,7 +38,7 @@ install_requires = [
         'future>0.14.0',
         'lzstring',
         'jinja2>=2.9',
-        'matplotlib>=2.1.1',
+        'matplotlib',
         'markdown',
         'numpy',
         'pyyaml',
@@ -67,6 +67,9 @@ setup(
     install_requires = install_requires,
     entry_points = {
         'multiqc.modules.v1': [
+            'ab_methods_section = multiqc.modules.ab_methods_section:MultiqcModule',
+            'ab_read_quality = multiqc.modules.ab_read_quality:MultiqcModule',
+            'ab_cpu_times = multiqc.modules.ab_cpu_times:MultiqcModule',
             'adapterRemoval = multiqc.modules.adapterRemoval:MultiqcModule',
             'afterqc = multiqc.modules.afterqc:MultiqcModule',
             'bamtools = multiqc.modules.bamtools:MultiqcModule',
@@ -78,13 +81,11 @@ setup(
             'bowtie1 = multiqc.modules.bowtie1:MultiqcModule',
             'bowtie2 = multiqc.modules.bowtie2:MultiqcModule',
             'busco = multiqc.modules.busco:MultiqcModule',
-            'clipandmerge = multiqc.modules.clipandmerge:MultiqcModule',
             'clusterflow = multiqc.modules.clusterflow:MultiqcModule',
             'conpair = multiqc.modules.conpair:MultiqcModule',
             'custom_content = multiqc.modules.custom_content:custom_module_classes', # special case
             'cutadapt = multiqc.modules.cutadapt:MultiqcModule',
             'disambiguate = multiqc.modules.disambiguate:MultiqcModule',
-            'dedup = multiqc.modules.dedup:MultiqcModule',
             'deeptools = multiqc.modules.deeptools:MultiqcModule',
             'fastq_screen = multiqc.modules.fastq_screen:MultiqcModule',
             'fastqc = multiqc.modules.fastqc:MultiqcModule',
@@ -103,6 +104,7 @@ setup(
             'leehom = multiqc.modules.leehom:MultiqcModule',
             'macs2 = multiqc.modules.macs2:MultiqcModule',
             'methylQA = multiqc.modules.methylQA:MultiqcModule',
+            'mummerplot = multiqc.modules.mummerplot:MultiqcModule',
             'peddy = multiqc.modules.peddy:MultiqcModule',
             'picard = multiqc.modules.picard:MultiqcModule',
             'preseq = multiqc.modules.preseq:MultiqcModule',
@@ -135,6 +137,7 @@ setup(
             'sections = multiqc.templates.sections',
             'simple = multiqc.templates.simple',
             'geo = multiqc.templates.geo',
+            'assembler_benchmark = multiqc.templates.assembler_benchmark',
         ],
         # 'multiqc.cli_options.v1': [
             # 'my-new-option = myplugin.cli:new_option'

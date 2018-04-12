@@ -10,8 +10,8 @@
 #  3. <working directory>/multiqc_config.yaml
 #################################################################
 
-title: null
-subtitle: null
+title: Assembler Benchmark for ONT MinION data
+subtitle: Based on an automated <a href=https://github.com/cvdelannoy/MinIONAssemblerBenchmark\> benchmarking routine </a>
 intro_text: null
 report_comment: null
 report_header_info: null
@@ -81,7 +81,7 @@ fn_ignore_dirs:
     - 'icarus_viewers'       # quast
     - 'runs_per_reference'   # quast
     - 'not_aligned'          # quast
-    - 'contigs_reports'      # quast
+#    - 'contigs_reports'      # quast, need this for mummerplots
 
 fn_ignore_paths:
     - '*/work/??/??????????????????????????????' # Nextflow work directories - always same hash lengths
@@ -157,6 +157,8 @@ fn_clean_exts:
     - '.concordance'
     - '.contamination'
     - '.BEST.results'
+    - '_summary'
+    - '.summary'
     - '_peaks.xls'
     - '.relatedness'
     - '.cnt'
@@ -195,8 +197,6 @@ fn_clean_trim:
     - '.json'
     - '_mqc'
     - 'short_summary_'
-    - '_summary'
-    - '.summary'
     - '.align'
     - '.h5'
     - '_matrix'
@@ -227,6 +227,31 @@ top_modules: []
 
 # Order that modules should appear in report. Try to list in order of analysis.
 module_order:
+    # Custom(ized) modules for assembler benchmark
+    - ab_methods_section:
+        module_tag:
+            - assembler_benchmark
+    - ab_read_quality:
+        module_tag:
+            - assembler_benchmark
+    - quast:
+        module_tag:
+            - DNA
+            - Metagenomics
+            - Denovo
+            - assembler_benchmark
+    - jellyfish:
+        module_tag:
+            - DNA
+            - assembler_benchmark
+    - mummerplot:
+        module_tag:
+            - assembler_benchmark
+    - ab_cpu_times:
+        module_tag:
+            - assembler_benchmark
+
+
     # MultiQC general module for catching output from custom scripts
     - 'custom_content'
     # Post-alignment QC
@@ -250,11 +275,7 @@ module_order:
         module_tag:
             - DNA
             - RNA
-    - quast:
-        module_tag:
-            - DNA
-            - Metagenomics
-            - Denovo
+
     - qorts:
         module_tag:
             - RNA
@@ -323,10 +344,6 @@ module_order:
         module_tag:
             - DNA
             - RNA
-    - dedup:
-        module_tag:
-            - DNA
-            - ancient
     - picard:
         module_tag:
             - DNA
@@ -334,7 +351,7 @@ module_order:
     - prokka:
         module_tag:
             - prokarytotic
-            - denovo
+            - Denovo
     - samblaster:
         module_tag:
             - DNA
@@ -347,9 +364,6 @@ module_order:
         module_tag:
             - DNA
             - RNA
-    - jellyfish:
-        module_tag:
-            - DNA
     - vcftools:
         module_tag:
             - DNA
@@ -393,6 +407,10 @@ module_order:
     - bowtie1:
         module_tag:
             - RNA
+#    - minimap2:
+#        module_tag:
+#            - assembler_benchmark
+
 
     # Pre-alignment QC
     - leehom:
@@ -403,10 +421,6 @@ module_order:
         module_tag:
             - RNA
             - DNA
-    - clipandmerge:
-        module_tag:
-            - DNA
-            - ancient
     - cutadapt:
         module_tag:
             - RNA
@@ -432,10 +446,6 @@ module_order:
             - RNA
             - DNA
     - fastq_screen:
-        module_tag:
-            - RNA
-            - DNA
-    - afterqc:
         module_tag:
             - RNA
             - DNA

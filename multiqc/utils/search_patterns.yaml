@@ -2,6 +2,29 @@
 # Default configurations for how modules can find their log files.
 # Loaded by the config module so that these patterns can be overwritten in user config files.
 
+ab_methods_section/publication_info:
+    fn: 'publication_info.txt'
+ab_methods_section/assembler_commands:
+    fn: '*.sh'
+    contents: '# ASSEMBLER COMMAND SCRIPT'
+ab_methods_section/log_files:
+    fn: '*.log'
+    contents: 'START AUTO VERSION PRINTING'
+    num_lines: 2
+ab_methods_section/analysis_tool_versions:
+    fn: 'analysis_tool_versions.yaml'
+ab_read_quality/minimap2:
+    fn: 'alignment_stats.yaml'
+ab_read_quality/nanostats:
+    fn: 'NanoStats.txt'
+ab_cpu_times:
+    fn: 'CPU_times.yaml'
+
+mummerplot/fplot:
+    fn: '*.fplot'
+mummerplot/rplot:
+    fn: '*.rplot'
+
 adapterRemoval:
     fn: '*.settings'
 afterqc:
@@ -89,30 +112,14 @@ bismark/bam2nuc:
     fn: '*.nucleotide_stats.txt'
 bowtie1:
     contents: '# reads processed:'
-    exclude_fn:
-        # Tophat log files
-        - 'bowtie.left_kept_reads.log'
-        - 'bowtie.left_kept_reads.m2g_um.log'
-        - 'bowtie.left_kept_reads.m2g_um_seg1.log'
-        - 'bowtie.left_kept_reads.m2g_um_seg2.log'
-        - 'bowtie.right_kept_reads.log'
-        - 'bowtie.right_kept_reads.m2g_um.log'
-        - 'bowtie.right_kept_reads.m2g_um_seg1.log'
-        - 'bowtie.right_kept_reads.m2g_um_seg2.log'
     shared: true
 bowtie2:
     contents: 'reads; of these:'
-    exclude_contents:
-        - 'bisulfite'
-        - 'Hi-C Pro'
     shared: true
 busco:
     fn: 'short_summary_*'
 custom_content:
     fn_re: '.+_mqc\.(yaml|yml|json|txt|csv|tsv|log|out)'
-clipandmerge:
-    contents: 'ClipAndMerge ('
-    num_lines: 5
 clusterflow/logs:
     fn: '*_clusterFlow.txt'
     shared: true
@@ -128,8 +135,6 @@ cutadapt:
     contents: 'This is cutadapt'
     # contents: 'cutadapt version' # Use this instead if using very old versions of cutadapt (eg. v1.2)
     shared: true
-dedup:
-    fn: 'dedup.log'
 deeptools/bamPEFragmentSize:
     contents: '	Frag. Sampled	Frag. Len. Min.	Frag. Len. 1st. Qu.	Frag. Len. Mean	Frag. Len. Median	Frag. Len. 3rd Qu.'
     num_lines: 1
@@ -206,6 +211,8 @@ interop/index-summary:
     contents: 'Total Reads,PF Reads,% Read Identified (PF),CV,Min,Max'
 jellyfish:
     fn: '*_jf.hist'
+jellyfish/count:
+    fn: '*.count'
 kallisto:
     contents: '[quant] finding pseudoalignments for the reads'
     shared: true
@@ -216,9 +223,10 @@ macs2:
     fn: '*_peaks.xls'
 methylQA:
     fn: '*.report'
+
+
 disambiguate:
-    contents: 'unique species A pairs'
-    num_lines: 2
+    contents_re: '.*unique species A pairs.*'
 peddy/summary_table:
     fn: '*.peddy.ped'
 peddy/het_check:
@@ -373,11 +381,11 @@ star/genecounts:
     fn: '*ReadsPerGene.out.tab'
 supernova/report:
     fn: '*report*.txt'
-    num_lines: 100
+    num_lines: 40
     contents: '- assembly checksum ='
 supernova/summary:
     fn: 'summary.json'
-    num_lines: 120
+    num_lines: 50
     contents: '"lw_mean_mol_len":'
 supernova/molecules:
     fn: 'histogram_molecules.json'

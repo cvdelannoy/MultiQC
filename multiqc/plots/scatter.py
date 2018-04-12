@@ -4,8 +4,14 @@
 
 import logging
 import random
-
-from multiqc.utils import report
+import os
+import numpy as np
+import re
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+from multiqc.utils import report, config
+from math import ceil
 
 logger = logging.getLogger(__name__)
 
@@ -72,6 +78,8 @@ def plot (data, pconfig=None):
         pass
 
     # Make a plot
+    if config.export_plots:
+        export_scatter(plotdata, pconfig)
     return highcharts_scatter_plot(plotdata, pconfig)
 
 def highcharts_scatter_plot (plotdata, pconfig=None):
@@ -124,3 +132,57 @@ def highcharts_scatter_plot (plotdata, pconfig=None):
     }
 
     return html
+
+def export_scatter(plotdata, pconfig):
+    # for fformat in config.export_plot_formats: # Only need png for now
+    nb_plots = len(plotdata)
+    nb_rows = ceil((nb_plots * 1.0) / 2.0)
+    vert_size = 7 * nb_rows
+    plt.axis('equal')
+    p = plt.figure(figsize=(14, vert_size), frameon=False)
+    num_pat = re.compile('[0-9]+')
+    for k, single_pd in enumerate(plotdata):
+        x = [point['x'] for point in single_pd]
+        y = [point['y'] for point in single_pd]
+        color = [re.findall(num_pat, point.get('color', 'rgb(244, 91, 91, 1)')) for point in single_pd]
+        color = np.array(color).astype(int)[:, 3]
+        axes = p.add_subplot(nb_rows, 2, k+1)
+        # _ = [axes.scatter(xc,yc,c=cc, s=2.5) for xc,yc,cc in zip(x,y,color)]
+        axes.scatter(x, y, c=color / 255.0, s=2.5)
+        axes.tick_params(labelsize=8, direction='out', left=False, right=False, top=False, bottom=False)
+        axes.set_xlabel(pconfig['data_labels'][k].get('xlab', ''))
+        axes.set_ylabel(pconfig['data_labels'][k].get('ylab', ''))
+    # define plot id
+    # name = pconfig['data_labels'][k].get('name','')
+    # pid = 'mqc_{}_{}'.format(pconfig['id'], name)
+    pid = 'mqc_{}'.format(pconfig['id'])
+    pid = report.save_htmlid(pid, skiplint=True)
+    # Make the directory if it doesn't already exist
+    plot_dir = os.path.join(config.plots_dir, 'png')
+    if not os.path.exists(plot_dir):
+        os.makedirs(plot_dir)
+    # Make and save plot
+    plot_fn = os.path.join(plot_dir, '{}.{}'.format(pid, 'png'))
+    p.savefig(plot_fn, format='png')
+
+
+def matplotlib_scatter(single_pd, k, pconfig=None):
+    p = plt.figure(figsize=(14, 14), frameon=False)
+    axes = p.add_subplot(111)
+    axes.tick_params(labelsize=8, direction='out', left=False, right=False, top=False, bottom=False)
+    axes.set_xlabel(pconfig.get('ylab', ''))
+    axes.set_ylabel(pconfig.get('xlab', ''))
+    x = [point['x'] for point in single_pd]
+    y = [point['y'] for point in single_pd]
+    axes.scatter(x, y)
+
+    if 'title' in pconfig:
+        top_gap = 1 + (0.5 / 14)
+        plt.text(0.5, top_gap, pconfig['title'], horizontalalignment='center', fontsize=20, transform=axes.transAxes)
+    axes.grid(True, zorder=0, which='both', axis='x', linestyle='-', color='#dedede', linewidth=1)
+    axes.set_axisbelow(True)
+    axes.spines['right'].set_visible(False)
+    axes.spines['top'].set_visible(False)
+    axes.spines['bottom'].set_visible(False)
+    axes.spines['left'].set_visible(False)
+    return p

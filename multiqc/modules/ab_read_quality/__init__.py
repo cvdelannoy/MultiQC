@@ -1,0 +1,2 @@
+from __future__ import absolute_import
+from .ab_read_quality import MultiqcModule
