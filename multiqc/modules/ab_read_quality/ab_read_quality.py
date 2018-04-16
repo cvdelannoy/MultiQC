@@ -11,9 +11,8 @@ log = logging.getLogger(__name__)
 class MultiqcModule(BaseMultiqcModule):
     def __init__(self):
         # Initialise the parent object
-        super(MultiqcModule, self).__init__(name='Raw read qaulity', anchor='read-quality',
-        href="",
-        info=". Nanoplot was used to derive basic raw read set characteristics and quality messures."
+        super(MultiqcModule, self).__init__(name='Raw read quality', anchor='read-quality',
+        info="Nanoplot was used to derive basic raw read set characteristics and quality messures."
              "Sequencing error rates were estimated by aligning the reads to the reference genome using minimap2.")
 
         # find and load minimap2 summary files

@@ -11,9 +11,7 @@ class MultiqcModule(BaseMultiqcModule):
     def __init__(self):
         # Initialise the parent object
         super(MultiqcModule, self).__init__(
-            name='Synteny plots', anchor='mummerplot-module',
-            href="http://mummer.sourceforge.net/",
-            info="Synteny plots were based on an alignment made using Nucmer (included in Quast).")
+            name='Synteny plots', anchor='syntenyplot-module')
 
         # find and load files
         self.plot_data_fwd = dict()
@@ -78,7 +76,6 @@ class MultiqcModule(BaseMultiqcModule):
     def make_plots(self):
         pconfig = {
             'id': 'mummerplot',
-            'title': 'Mummerplot',
             # 'marker_line_colour': 'rgba(0,0,0,0)',
             'marker_line_width': 0,
             'marker_size': 2,
