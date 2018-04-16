@@ -12,8 +12,7 @@ class MultiqcModule(BaseMultiqcModule):
     def __init__(self):
         # Initialise the parent object
         super(MultiqcModule, self).__init__(name='Raw read quality', anchor='read-quality',
-        info="Nanoplot was used to derive basic raw read set characteristics and quality messures."
-             "Sequencing error rates were estimated by aligning the reads to the reference genome using minimap2.")
+        info=" highly affects the quality of eventual assemblies and is therefore noted here. Nanoplot was used to derive basic raw read set characteristics and quality measures. Sequencing error rates were estimated by aligning the reads to the reference genome using Minimap2.")
 
         # find and load minimap2 summary files
         self.minimap2_summary = OrderedDict()
@@ -46,9 +45,6 @@ class MultiqcModule(BaseMultiqcModule):
         self.add_section(
             name="",
             anchor='read-quality',
-            description="""Read length and general quality meaures were calculated using NanoStat. 
-            Matches, substitutions, deletions and insertions with respect to a given reference, 
-            after alignment with Minimap2.""",
             plot=self.ab_read_quality_table()
         )
 

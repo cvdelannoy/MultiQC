@@ -152,7 +152,7 @@ class MultiqcModule(BaseMultiqcModule):
 
         self.add_section(
             anchor='jellyfish_kmer_comparison_plot',
-            description='Compare how often k-mers occur in different files.',
+            description='Compare how often k-mers occur in different assemblies and the reference genome.',
             plot=scatter.plot(plot_data, pconfig)
         )
 

@@ -11,7 +11,8 @@ class MultiqcModule(BaseMultiqcModule):
     def __init__(self):
         # Initialise the parent object
         super(MultiqcModule, self).__init__(
-            name='Synteny plots', anchor='syntenyplot-module')
+            name='Synteny plots', anchor='syntenyplot-module',
+            info=' were generated based on alignment by Nucmer, as included in Quast.')
 
         # find and load files
         self.plot_data_fwd = dict()
