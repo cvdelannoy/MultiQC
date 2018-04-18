@@ -70,6 +70,7 @@ setup(
             'ab_methods_section = multiqc.modules.ab_methods_section:MultiqcModule',
             'ab_read_quality = multiqc.modules.ab_read_quality:MultiqcModule',
             'ab_cpu_times = multiqc.modules.ab_cpu_times:MultiqcModule',
+            'quast_synteny = multiqc.modules.quast_synteny:MultiqcModule',
             'adapterRemoval = multiqc.modules.adapterRemoval:MultiqcModule',
             'afterqc = multiqc.modules.afterqc:MultiqcModule',
             'bamtools = multiqc.modules.bamtools:MultiqcModule',

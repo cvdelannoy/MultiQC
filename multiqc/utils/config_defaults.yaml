@@ -179,6 +179,7 @@ fn_clean_exts:
     - '.qhist'
     - '.rpkm'
     - '.selfSM'
+    - '.coords'
 
 # These are removed after the above, only if sample names
 # start or end with this string. Again, removed in order.
@@ -249,6 +250,9 @@ module_order:
             - assembler_benchmark
     - ab_cpu_times:
         module_tag:
+            - assembler_benchmark
+    - quast_synteny:
+        modulel_tag:
             - assembler_benchmark
 
 

@@ -19,6 +19,8 @@ ab_read_quality/nanostats:
     fn: 'NanoStats.txt'
 ab_cpu_times:
     fn: 'CPU_times.yaml'
+quast_synteny:
+    fn: '*.coords'
 
 mummerplot/fplot:
     fn: '*.fplot'

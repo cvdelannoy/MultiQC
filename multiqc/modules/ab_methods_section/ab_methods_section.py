@@ -1,4 +1,5 @@
 from multiqc.modules.base_module import BaseMultiqcModule
+from os.path import splitext
 import logging
 import yaml
 import re
@@ -137,7 +138,7 @@ class MultiqcModule(BaseMultiqcModule):
         command = re.search("# COMMANDS.+(?=echo \"START AUTO VERSION PRINTING\")(?s)", f['f']).group(0)
         command = '\n'.join(command.split('\n')[1:]).strip()
 
-        fn = f['fn'].strip('.sh')
+        fn = splitext(f['fn'])[0]
         self.pipelines[fn] = {
             'tool_description': tool_description,
             'version_info': version_info,
