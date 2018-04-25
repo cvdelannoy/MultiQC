@@ -35,15 +35,15 @@ class MultiqcModule(BaseMultiqcModule):
 
         out_dict={}
         out_dict['authors'] = self.publication_info['authors']
-        out_dict['abstract'] = """
-        The MinION is a portable DNA sequencer that generates long error-prone reads.
-         As both the hardware and analysis software are updated regularly, the most suitable pipeline for 
-         subsequent analyses of a dataset generated with a given combination of hardware and software for a 
-         given organism is not always clear. Here we present a benchmark for a selection of <i>de novo</i> 
-         assemblers available to MinION users, on a read set of <i>{organism}</i>. This benchmark is based on a 
-         <a href=\\>benchmarking routine</a>, designed to facilitate easy replication on a read set of choice 
-         and addition of other <i>de novo</i> assembly pipelines.
-        """.format(organism=self.publication_info['organism'])
+        out_dict['abstract'] = ("The MinION is a portable DNA sequencer that generates long error-prone reads. "
+                                "As both the hardware and analysis software are updated regularly, the most suitable "
+                                "pipeline for subsequent analyses of a dataset generated with a given combination of "
+                                "hardware and software for a given organism is not always clear. Here we present a "
+                                "benchmark for a selection of <i>de novo</i> assemblers available to MinION users, on a"
+                                " read set of <i>{organism}</i>. This benchmark is based on a "
+                                "<a href=\\>benchmarking routine</a>, designed to facilitate easy replication on a "
+                                "read set of choice and addition of other "
+                                "<i>de novo</i> assembly pipelines.").format(organism=self.publication_info['organism'])
         out_dict['pipelines'] = ""
         for pl in self.pipelines:
             pipeline = self.pipelines[pl]
@@ -55,21 +55,23 @@ class MultiqcModule(BaseMultiqcModule):
             htmltxt.append(''.join(version_list))
             htmltxt.append("<b>Used command:</b><pre><code>"+pipeline['command']+"</code></pre>")
             out_dict['pipelines'] += "<br>&zwnj;".join(htmltxt)
-        out_dict['readset_quality'] = """
-        Reads in this dataset were generated on a Minion with {flowcell} flowcell with {kit} kit. The reads were basecalled 
-        using {basecaller}. Prior to assembly, the quality of the untreated readset was analysed using NanoPlot (version: {nanoplot}) 
-        and mapped using Minimap2 (version: {minimap2}). """.format(flowcell=self.publication_info['flowcell'],
-                                                                    kit=self.publication_info['kit'],
-                                                                    basecaller=self.publication_info['basecaller'],
-                                                                    nanoplot=self.analysis_tool_versions['Nanoplot'],
-                                                                    minimap2=self.analysis_tool_versions['Minimap2'])
-        out_dict['assembly_quality'] = """
-        Produced assemblies were analyzed and compared on continuity and agreement with the reference genome. Quast 
-        (version: {quast}) was used to determine a wide array of quality metrics in both quality categories and produce 
-        synteny plots. To elucidate any bias in the occurence of certain sequences, 5-mers in the assemblies and the 
-        reference genomes were compared using Jellyfish (version: {jellyfish}). Finally, results were summarized using MultiQC.
-        """.format(quast=self.analysis_tool_versions['Quast'],
-                   jellyfish=self.analysis_tool_versions['Jellyfish'])
+        out_dict['readset_quality'] = ("Reads in this dataset were generated on a Minion with {flowcell} flowcell with "
+                                       "{kit} kit. The reads were basecalled using {basecaller}. Prior to assembly, "
+                                       "the quality of the untreated readset was analysed using NanoPlot "
+                                       "(version: {nanoplot}) and mapped using Minimap2 (version: "
+                                       "{minimap2}).").format(flowcell=self.publication_info['flowcell'],
+                                                              kit=self.publication_info['kit'],
+                                                              basecaller=self.publication_info['basecaller'],
+                                                              nanoplot=self.analysis_tool_versions['Nanoplot'],
+                                                              minimap2=self.analysis_tool_versions['Minimap2'])
+        out_dict['assembly_quality'] = ("Produced assemblies were analyzed and compared on continuity and agreement "
+                                        "with the reference genome. Quast (version: {quast}) was used to determine a "
+                                        "wide array of quality metrics in both quality categories and produce synteny "
+                                        "plots. To elucidate any bias in the occurence of certain sequences, 5-mers in "
+                                        "the assemblies and the reference genomes were compared using Jellyfish "
+                                        "(version: {jellyfish}). Finally, results were summarized "
+                                        "using MultiQC.").format(quast=self.analysis_tool_versions['Quast'],
+                                                                 jellyfish=self.analysis_tool_versions['Jellyfish'])
 
 
         self.add_section(
