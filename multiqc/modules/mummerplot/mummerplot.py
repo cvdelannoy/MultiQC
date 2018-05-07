@@ -13,7 +13,7 @@ class MultiqcModule(BaseMultiqcModule):
         super(MultiqcModule, self).__init__(
             name='Synteny plots', anchor='syntenyplot-module',
             href="http://quast.bioinf.spbau.ru/manual.html",
-            info="Synteny plots were based on an alignment made using Minimap2 (included in Quast).")
+            info="Synteny plots were based on an alignment made using Nucmer (included in Quast).")
 
         # find and load files
         self.plot_data_fwd = dict()

@@ -61,7 +61,7 @@ class MultiqcModule(BaseMultiqcModule):
                                        "(version: {nanoplot}) and mapped using Minimap2 (version: "
                                        "{minimap2}).").format(flowcell=self.publication_info['flowcell'],
                                                               kit=self.publication_info['kit'],
-                                                              basecaller=self.publication_info['basecaller'],
+                                                              basecaller=self.publication_info['basecaller'].replace('_', ' '),
                                                               nanoplot=self.analysis_tool_versions['Nanoplot'],
                                                               minimap2=self.analysis_tool_versions['Minimap2'])
         out_dict['assembly_quality'] = ("Produced assemblies were analyzed and compared on continuity and agreement "
