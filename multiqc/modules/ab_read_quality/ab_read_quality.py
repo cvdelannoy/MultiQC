@@ -56,6 +56,8 @@ class MultiqcModule(BaseMultiqcModule):
     def parse_minimap2_summary(self, f):
         f_dict = yaml.load(f['f'])
         block_len = sum(f_dict.values()) * 1.0
+        if block_len == 0:
+            block_len = 0.000000001  # prevent breaking, but very ugly
         for k in f_dict:
             self.minimap2_summary[k] = dict(absolute=f_dict[k],
                                               relative=f_dict[k] * 1.0 / block_len * 100)

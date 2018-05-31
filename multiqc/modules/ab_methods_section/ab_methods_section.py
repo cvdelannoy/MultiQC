@@ -152,7 +152,7 @@ class MultiqcModule(BaseMultiqcModule):
         Parse the log files generated during assembler running. For now, only automatically found version info is
         retrieved.
         """
-        pipeline_name = f['fn'].strip('.log')
+        pipeline_name = splitext(f['fn'])[0]
         cur_pipeline = self.pipelines[pipeline_name]
         version_dict = cur_pipeline.get('version_info')
 

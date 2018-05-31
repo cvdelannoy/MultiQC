@@ -20,10 +20,14 @@ class MultiqcModule(BaseMultiqcModule):
         self.plot_data_rev = dict()
         for f in self.find_log_files('mummerplot/fplot'):
             fn_clean = re.sub('\.fplot', '', f['fn'])
-            self.plot_data_fwd[fn_clean] = self.plotfile_to_list(f['f'], 'fwd', 'rgba(251, 128, 114, 1)')
+            points_list = self.plotfile_to_list(f['f'], 'fwd', 'rgba(251, 128, 114, 1)')
+            if len(points_list):
+                self.plot_data_fwd[fn_clean] = points_list
         for f in self.find_log_files('mummerplot/rplot'):
             fn_clean = re.sub('\.rplot', '', f['fn'])
-            self.plot_data_rev[fn_clean] = self.plotfile_to_list(f['f'], 'ref', 'rgba(128, 177, 211, 1)')
+            points_list = self.plotfile_to_list(f['f'], 'ref', 'rgba(128, 177, 211, 1)')
+            if len(points_list):
+                self.plot_data_rev[fn_clean] = points_list
 
         if not self.plot_data_fwd and not self.plot_data_rev:
             raise UserWarning
