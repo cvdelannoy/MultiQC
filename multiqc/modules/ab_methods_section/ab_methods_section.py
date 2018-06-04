@@ -124,21 +124,33 @@ class MultiqcModule(BaseMultiqcModule):
             return
         self._analysis_tool_versions = yaml.load(fdict[0]['f'])
 
-
     def parse_assembler_command(self, f):
         # TODO: Version info derived from commands added later! (which is ugly and hacky)
         # TODO: this entire parsing thing is in dire need of rewriting anyway
-        tool_description = re.search("# TOOL DESCRIPTION.+(?=VERSIONS---)(?s)", f['f']).group(0)
-        tool_description = tool_description.replace('#', '').split('\n')[1:]
-        tool_description = ''.join(tool_description).strip()
 
-        version_info = re.search("# VERSIONS.+(?=COMMANDS)(?s)", f['f']).group(0)
-        version_info = re.findall('(?<=#).+:.+', version_info)
-        version_info = '\n'.join([vi.strip() for vi in version_info])
-        version_info = yaml.load(version_info)
+        tool_description = re.search("# TOOL DESCRIPTION.+(?=VERSIONS---)(?s)", f['f'])
+        if tool_description:
+            tool_description = tool_description.group(0)
+            tool_description = tool_description.replace('#', '').split('\n')[1:]
+            tool_description = ''.join(tool_description).strip()
+        else:
+            tool_description = "No description available"
 
-        command = re.search("# COMMANDS.+(?=echo \"START AUTO VERSION PRINTING\")(?s)", f['f']).group(0)
-        command = '\n'.join(command.split('\n')[1:]).strip()
+        version_info = re.search("# VERSIONS.+(?=COMMANDS)(?s)", f['f'])
+        if version_info:
+            version_info = version_info.group(0)
+            version_info = re.findall('(?<=#).+:.+', version_info)
+            version_info = '\n'.join([vi.strip() for vi in version_info])
+            version_info = yaml.load(version_info)
+        else:
+            version_info = {}
+
+        command = re.search("# COMMANDS.+(?s)", f['f'])
+        if command:
+            command = command.group(0)
+            command = '\n'.join(command.split('\n')[1:]).strip()
+        else:
+            command = 'No command in script or not parsed. Check files in assembler_scripts folder.'
 
         fn = splitext(f['fn'])[0]
         self.pipelines[fn] = {
@@ -149,8 +161,8 @@ class MultiqcModule(BaseMultiqcModule):
 
     def parse_logfile(self, f):
         """
-        Parse the log files generated during assembler running. For now, only automatically found version info is
-        retrieved.
+        Parse the log files generated during assembler running. Only automatically found version info is
+        retrieved here.
         """
         pipeline_name = splitext(f['fn'])[0]
         cur_pipeline = self.pipelines[pipeline_name]
@@ -158,7 +170,11 @@ class MultiqcModule(BaseMultiqcModule):
 
         ac_tool_list = list(version_dict) # previously composed list of tools
 
-        version_text=re.search("(?<=START AUTO VERSION PRINTING\n).+(?=END AUTO VERSION PRINTING)(?s)" , f['f']).group(0)
+        version_text = re.search("(?<=START AUTO VERSION PRINTING\n).+(?=END AUTO VERSION PRINTING)(?s)", f['f'])
+        if not version_text:
+            log.warning('No version information found for pipeline {pl}. Skipping'.format(pl=pipeline_name))
+            return
+        version_text = version_text.group(0)
         version_text_list = version_text.strip('\n').split('\n')
         tool_list = []
         version_list = []
