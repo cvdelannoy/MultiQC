@@ -90,10 +90,6 @@ class MultiqcModule(BaseMultiqcModule):
     def analysis_tool_versions(self):
         return self._analysis_tool_versions
 
-    # @property
-    # def versions_info(self):
-    #     return self._versions_info
-
     @publication_info.setter
     def publication_info(self, f):
         fdict = list(f)
@@ -145,7 +141,7 @@ class MultiqcModule(BaseMultiqcModule):
         else:
             version_info = {}
 
-        command = re.search("# COMMANDS.+(?s)", f['f'])
+        command = re.search("# COMMANDS-------.+(?s)", f['f'])
         if command:
             command = command.group(0)
             command = '\n'.join(command.split('\n')[1:]).strip()
