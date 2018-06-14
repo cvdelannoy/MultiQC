@@ -11,19 +11,18 @@ log = logging.getLogger(__name__)
 class MultiqcModule(BaseMultiqcModule):
     def __init__(self):
         # Initialise the parent object
-        super(MultiqcModule, self).__init__(name='Raw read qaulity', anchor='read-quality',
+        super(MultiqcModule, self).__init__(name='Raw read quality', anchor='read-quality',
         href="",
-        info=". Nanoplot was used to derive basic raw read set characteristics and quality messures."
-             "Sequencing error rates were estimated by aligning the reads to the reference genome using minimap2.")
+        info="was assessed assessed in two ways; Nanoplot was used to derive basic raw read set characteristics "
+             "and quality messures. Then, sequencing error rates were estimated by aligning the reads to the "
+             "reference genome using mappy (Minimap2).")
 
-        # find and load minimap2 summary files
-        self.minimap2_summary = OrderedDict()
-        for f in self.find_log_files('ab_read_quality/minimap2'):
-            self.parse_minimap2_summary(f)
-        if len(self.minimap2_summary ) == 0:
-            raise UserWarning
-        else:
-            log.info("found Minimap2 alignment summary")
+        self._alignment_summary = None
+
+
+
+        # find and load alignment summary
+        self.alignment_summary = self.find_log_files('ab_read_quality/alignment_summary')
             
         # find and load nanostats summary files
         self.nanostats_summary = OrderedDict()
@@ -40,7 +39,7 @@ class MultiqcModule(BaseMultiqcModule):
 
 
         # write parsed data to file
-        self.write_data_file(dict(minimap2=self.minimap2_summary, nanostats=self.nanostats_summary),
+        self.write_data_file(dict(minimap2=self.alignment_summary, nanostats=self.nanostats_summary),
                              'multiqc_readqual_summary')
 
         # Table
@@ -53,14 +52,43 @@ class MultiqcModule(BaseMultiqcModule):
             plot=self.ab_read_quality_table()
         )
 
-    def parse_minimap2_summary(self, f):
-        f_dict = yaml.load(f['f'])
-        block_len = sum(f_dict.values()) * 1.0
+    @property
+    def alignment_summary(self):
+        return self._alignment_summary
+
+    @alignment_summary.setter
+    def alignment_summary(self, f):
+        f_list = list(f)
+        if len(f_list) > 1:
+            log.error('More than 1 alignment summary file found!')
+            raise UserWarning
+        elif len(f_list) == 0:
+            log.error('No alignment summary file found!')
+            raise UserWarning
+        out_dict = dict()
+        f_dict = yaml.load(f_list[0]['f'])
+        basecount_cats = ['matches', 'mismatches', 'deletions', 'insertions']
+        f_dict_basecounts = {bc: f_dict[bc] for bc in basecount_cats}
+        block_len = sum(f_dict_basecounts.values()) * 1.0
         if block_len == 0:
             block_len = 0.000000001  # prevent breaking, but very ugly
-        for k in f_dict:
-            self.minimap2_summary[k] = dict(absolute=f_dict[k],
-                                              relative=f_dict[k] * 1.0 / block_len * 100)
+        for k in basecount_cats:
+            out_dict[k] = dict(absolute=f_dict_basecounts[k],
+                               relative=f_dict_basecounts[k] * 1.0 / block_len * 100)
+        self._alignment_summary = out_dict
+        # # TODO
+        # self._mapping_quality = f_dict['mapping_quality']
+        # self._nb_mappings = f_dict['mapping_quality']
+
+    #
+    # def parse_minimap2_summary(self, f):
+    #     f_dict = yaml.load(f['f'])
+    #     block_len = sum(f_dict.values()) * 1.0
+    #     if block_len == 0:
+    #         block_len = 0.000000001  # prevent breaking, but very ugly
+    #     for k in f_dict:
+    #         self.minimap2_summary[k] = dict(absolute=f_dict[k],
+    #                                           relative=f_dict[k] * 1.0 / block_len * 100)
             
     
     def parse_nanostats_summary(self, f):
@@ -69,14 +97,14 @@ class MultiqcModule(BaseMultiqcModule):
 
 
     def fuse_summaries(self):
-        mm_keys = list(self.minimap2_summary)
+        mm_keys = list(self.alignment_summary)
         mm_idx = 0
         for k in list(self.nanostats_summary):
             cur_dict = OrderedDict()
             cur_dict['ns_value'] = self.nanostats_summary[k]
             cur_dict['mm_name'] = '<h5><b>' + mm_keys[mm_idx]
-            cur_dict['absolute'] = self.minimap2_summary[mm_keys[mm_idx]]['absolute']
-            cur_dict['relative'] = self.minimap2_summary[mm_keys[mm_idx]]['relative']
+            cur_dict['absolute'] = self.alignment_summary[mm_keys[mm_idx]]['absolute']
+            cur_dict['relative'] = self.alignment_summary[mm_keys[mm_idx]]['relative']
             self.ab_read_quality_measures[k] = cur_dict
             mm_idx += 1
 

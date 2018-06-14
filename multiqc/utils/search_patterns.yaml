@@ -3,22 +3,21 @@
 # Loaded by the config module so that these patterns can be overwritten in user config files.
 
 ab_methods_section/publication_info:
-    fn: 'publication_info.txt'
-ab_methods_section/assembler_commands:
-    fn: '*.sh'
-    contents: '# ASSEMBLER COMMAND SCRIPT'
+    fn: 'publication_info.yaml'
 ab_methods_section/log_files:
     fn: '*.log'
-    contents: 'START AUTO VERSION PRINTING'
+    contents: 'START METHODS PRINTING'
     num_lines: 2
+ab_methods_section/cmd_files:
+    fn: '*.cmd'
 ab_methods_section/analysis_tool_versions:
     fn: 'analysis_tool_versions.yaml'
-ab_read_quality/minimap2:
+ab_read_quality/alignment_summary:
     fn: 'alignment_stats.yaml'
 ab_read_quality/nanostats:
-    fn: 'NanoStats.txt'
+    fn: 'nanostats.txt'
 ab_cpu_times:
-    fn: 'CPU_times.yaml'
+    fn: '*.bm'
 quast_synteny:
     fn: '*.coords'
 
