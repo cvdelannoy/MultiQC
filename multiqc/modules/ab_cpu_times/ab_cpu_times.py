@@ -30,6 +30,9 @@ class MultiqcModule(BaseMultiqcModule):
         # Add to main table
         self.general_stats_addcols(self.cpu_usage_gs)
 
+        # Write data to file
+        self.write_data_file(self.cpu_usage, 'cpu_usage')
+
     @property
     def cpu_usage_gs(self):
         return self._cpu_usage_gs

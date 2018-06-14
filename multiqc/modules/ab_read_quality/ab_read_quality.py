@@ -46,9 +46,6 @@ class MultiqcModule(BaseMultiqcModule):
         self.add_section(
             name="",
             anchor='read-quality',
-            description="""Read length and general quality meaures were calculated using NanoStat. 
-            Matches, substitutions, deletions and insertions with respect to a given reference, 
-            after alignment with Minimap2.""",
             plot=self.ab_read_quality_table()
         )
 
