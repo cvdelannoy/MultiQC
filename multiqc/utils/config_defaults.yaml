@@ -112,6 +112,7 @@ fn_clean_sample_names: true
 # Used for cleaning sample names. Should be strings.
 # NB: These are removed in order!
 fn_clean_exts:
+    - '.coords'
     - '.cmd'
     - '.bm'
     - '.gz'
@@ -181,7 +182,6 @@ fn_clean_exts:
     - '.qhist'
     - '.rpkm'
     - '.selfSM'
-    - '.coords'
 
 # These are removed after the above, only if sample names
 # start or end with this string. Again, removed in order.
@@ -253,10 +253,9 @@ module_order:
     - ab_cpu_times:
         module_tag:
             - assembler_benchmark
-    - quast_synteny:
-        modulel_tag:
+    - nucmer:
+        module_tag:
             - assembler_benchmark
-
 
     # MultiQC general module for catching output from custom scripts
     - 'custom_content'

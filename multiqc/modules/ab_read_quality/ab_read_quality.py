@@ -13,7 +13,7 @@ class MultiqcModule(BaseMultiqcModule):
         # Initialise the parent object
         super(MultiqcModule, self).__init__(name='Raw read quality', anchor='read-quality',
         href="",
-        info="was assessed assessed in two ways; Nanoplot was used to derive basic raw read set characteristics "
+        info="was assessed in two ways; Nanoplot was used to derive basic raw read set characteristics "
              "and quality messures. Then, sequencing error rates were estimated by aligning the reads to the "
              "reference genome using mappy (Minimap2).")
 
