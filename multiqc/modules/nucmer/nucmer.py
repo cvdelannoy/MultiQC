@@ -55,14 +55,14 @@ class MultiqcModule(BaseMultiqcModule):
 
     def plotfile_to_list(self, pf):
         step_size = 5000
-        pf_list = pf.split('\n')[2:]
+        pf_list = list(filter(None, pf.split('\n')[2:]))
         if not len(pf_list):
             return []
         points_list = []
         for lp in pf_list:
             xc, yc = lp.split('|')[:2]
-            x_start, x_stop = list(filter(None, xc.strip().split(' ')))
-            y_start, y_stop = list(filter(None, yc.strip().split(' ')))
+            x_start, x_stop = [int(x) for x in list(filter(None, xc.strip().split(' ')))]
+            y_start, y_stop = [int(y) for y in list(filter(None, yc.strip().split(' ')))]
             dydx = float(y_start - y_stop) / float(x_start - x_stop)
             if dydx > 0:
                 color = 'rgba(251, 128, 114, 1)'
