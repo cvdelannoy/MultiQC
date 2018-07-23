@@ -48,8 +48,8 @@ class MultiqcModule(BaseMultiqcModule):
             else:
                 color = 'rgba(128, 177, 211, 1)'
                 name = 'rev'
-            lines_dict[str(lc)] = {x_start: y_start,
-                                   x_stop: y_stop,
+            lines_dict[str(lc)] = {str(x_start): str(y_start),
+                                   str(x_stop): str(y_stop),
                                    'name': name,
                                    'color': color}
             # lines_list.append({x_start: y_start,
