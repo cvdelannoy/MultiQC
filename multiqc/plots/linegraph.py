@@ -144,7 +144,8 @@ def plot (data, pconfig=None):
         else:
             # Use MatPlotLib to generate static plots if requested
             if config.export_plots:
-                matplotlib_linegraph(plotdata, pconfig)
+                pass
+                # matplotlib_linegraph(plotdata, pconfig)
             # Return HTML for HighCharts dynamic plot
             return highcharts_linegraph(plotdata, pconfig)
 
