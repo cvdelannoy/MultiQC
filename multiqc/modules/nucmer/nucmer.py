@@ -54,7 +54,7 @@ class MultiqcModule(BaseMultiqcModule):
                                x_stop: y_stop,
                                'name': name,
                                'color': color})
-        return lines_list
+        return [lines_dict]
 
     @property
     def data_labels(self):
