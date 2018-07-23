@@ -36,7 +36,8 @@ class MultiqcModule(BaseMultiqcModule):
             return []
         # points_list = []
         lines_list = []
-        for lp in pf_list:
+        lines_dict = {}
+        for lc, lp in enumerate(pf_list):
             xc, yc = lp.split('|')[:2]
             x_start, x_stop = [int(x) for x in list(filter(None, xc.strip().split(' ')))]
             y_start, y_stop = [int(y) for y in list(filter(None, yc.strip().split(' ')))]
@@ -47,10 +48,13 @@ class MultiqcModule(BaseMultiqcModule):
             else:
                 color = 'rgba(128, 177, 211, 1)'
                 name = 'rev'
-            lines_list.append({x_start: y_start,
-                               x_stop: y_stop,
-                               'color': color})
-        return lines_list
+            lines_dict[str(lc)] = {x_start: y_start,
+                                   x_stop: y_stop,
+                                   'color': color}
+            # lines_list.append({x_start: y_start,
+            #                    x_stop: y_stop,
+            #                    'color': color})
+        return lines_dict
         #
         #     x_points = list(range(x_start, x_stop, step_size))
         #     if x_points[-1] != x_stop:  # ensure endpoint is always there
