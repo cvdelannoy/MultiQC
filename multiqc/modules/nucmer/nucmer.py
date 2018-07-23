@@ -30,13 +30,11 @@ class MultiqcModule(BaseMultiqcModule):
         self.make_plots()
 
     def plotfile_to_list(self, pf):
-        # step_size = 5000
         pf_list = list(filter(None, pf.split('\n')[2:]))
         if not len(pf_list):
             return []
-        # points_list = []
-        lines_list = []
         lines_dict = {}
+        lines_list = []
         for lc, lp in enumerate(pf_list):
             xc, yc = lp.split('|')[:2]
             x_start, x_stop = [int(x) for x in list(filter(None, xc.strip().split(' ')))]
@@ -48,25 +46,15 @@ class MultiqcModule(BaseMultiqcModule):
             else:
                 color = 'rgba(128, 177, 211, 1)'
                 name = 'rev'
-            lines_dict[str(lc)] = {str(x_start): str(y_start),
-                                   str(x_stop): str(y_stop),
+            lines_dict[str(lc)] = {x_start: y_start,
+                                   x_stop: y_stop,
                                    'name': name,
                                    'color': color}
-            # lines_list.append({x_start: y_start,
-            #                    x_stop: y_stop,
-            #                    'color': color})
-        return lines_dict
-        #
-        #     x_points = list(range(x_start, x_stop, step_size))
-        #     if x_points[-1] != x_stop:  # ensure endpoint is always there
-        #         x_points.append(x_stop)
-        #     y_points = [0] * len(x_points)
-        #     y_points[0] = y_start
-        #     for i, xc in enumerate(x_points):
-        #         y_points[i] = y_start + dydx * (xc - x_start)
-        #     cur_points_list = [{'x': x, 'y': y, 'name': name, 'color': color} for x, y in zip(x_points, y_points)]
-        #     points_list.extend(cur_points_list)
-        # return points_list
+            lines_list.append({x_start: y_start,
+                               x_stop: y_stop,
+                               'name': name,
+                               'color': color})
+        return lines_list
 
     @property
     def data_labels(self):
