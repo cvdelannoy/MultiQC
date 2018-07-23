@@ -46,15 +46,15 @@ class MultiqcModule(BaseMultiqcModule):
             else:
                 color = 'rgba(128, 177, 211, 1)'
                 name = 'rev'
-            lines_dict[str(lc)] = {x_start: y_start,
+            lines_dict[str(lc)] = [{x_start: y_start,
                                    x_stop: y_stop,
                                    'name': name,
-                                   'color': color}
+                                   'color': color}]
             lines_list.append({x_start: y_start,
                                x_stop: y_stop,
                                'name': name,
                                'color': color})
-        return [lines_dict]
+        return lines_dict
 
     @property
     def data_labels(self):
