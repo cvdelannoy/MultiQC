@@ -50,6 +50,7 @@ class MultiqcModule(BaseMultiqcModule):
                 name = 'rev'
             lines_dict[str(lc)] = {x_start: y_start,
                                    x_stop: y_stop,
+                                   'name': name,
                                    'color': color}
             # lines_list.append({x_start: y_start,
             #                    x_stop: y_stop,
