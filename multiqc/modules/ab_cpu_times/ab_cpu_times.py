@@ -57,15 +57,15 @@ class MultiqcModule(BaseMultiqcModule):
             cpu_dict_gs_cur = dict()
             for k, v in zip(cpu_list[0], cpu_list[1]):
                 if k == 'h:m:s':
-                    cpu_dict_cur['CPU time'] = v
-                    cpu_dict_gs_cur['CPU time'] = v
+                    cpu_dict_cur['Wall time'] = v
+                    cpu_dict_gs_cur['Wall time'] = v
                 elif k == 'max_pss':
                     cpu_dict_cur['peak PSS (MB)'] = float(v)
+                    cpu_dict_gs_cur['peak CPU usage (PSS) (MB)'] = float(v)
                 elif k == 'max_uss':
                     cpu_dict_cur['peak USS (MB)'] = float(v)
                 elif k == 'mean_load':
-                    cpu_dict_cur['mean load (MB)'] = float(v)
-                    cpu_dict_gs_cur['mean CPU load (MB)'] = float(v)
+                    cpu_dict_cur['mean CPU load (MB)'] = float(v)
                 elif k == 'io_in':
                     cpu_dict_cur['I/O in (MB/s)'] = float(v)
                 elif k == 'io_out':
