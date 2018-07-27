@@ -2,6 +2,7 @@ from multiqc.modules.base_module import BaseMultiqcModule
 from multiqc.plots import linegraph, scatter
 import logging
 import re
+from math import inf
 
 # Initialise the logger
 log = logging.getLogger(__name__)
@@ -19,9 +20,10 @@ class MultiqcModule(BaseMultiqcModule):
         # self.plot_data = {}
         self.plot_data = []
         self.data_labels = []
+        self.max_coord = 0
         plots_html = ''
         for f in self.find_log_files('nucmer'):
-            plot_coords, val_range = self.plotfile_to_list(f['f'], f['s_name'])
+            plot_coords, max_coord = self.plotfile_to_list(f['f'], f['s_name'])
         #     if len(plot_coords):
         #         data_labels = {'name': f['s_name'],
         #                        'xlab': 'reference',
@@ -35,6 +37,7 @@ class MultiqcModule(BaseMultiqcModule):
                 self.data_labels.append({'name': f['s_name'],
                                          'xlab': 'reference',
                                          'ylab': f['s_name']})
+                self.max_coord = max(self.max_coord, max_coord)
 
         if not self.plot_data:
             raise UserWarning
@@ -51,7 +54,8 @@ class MultiqcModule(BaseMultiqcModule):
         lines_dict = {}
         lines_list = []
         points_list = []
-        val_range = [9999999999,0]
+        val_range = [inf, 0]
+        max_val = 0
         for lc, lp in enumerate(pf_list):
             xc, yc = lp.split('|')[:2]
             x_start, x_stop = [int(x) for x in list(filter(None, xc.strip().split(' ')))]
@@ -68,7 +72,7 @@ class MultiqcModule(BaseMultiqcModule):
             y_points = [0] * len(x_points)
             y_points[0] = y_start
             for i, xc in enumerate(x_points):
-                y_points[i] = y_start + dydx * (xc - x_start)
+                y_points[i] = y_start + dydx * (xc - x_start) + x_start
             cur_points_list = [{'x': x, 'y': y, 'color': color} for x, y in
                                             zip(x_points, y_points)]
             points_list.extend(cur_points_list)
@@ -78,11 +82,12 @@ class MultiqcModule(BaseMultiqcModule):
             #                        x_stop: y_stop,
             #                        'name': name,
             #                        'color': color}
+            max_val = max(max_val, y_start, y_stop, x_start, x_stop)
             val_range = [min(val_range[0], x_start, x_stop, y_start, y_stop),
                          max(val_range[1], x_start, x_stop, y_start, y_stop)]
             lines_list.append({x_start: y_start,
                                x_stop: y_stop})
-        return points_list, val_range
+        return points_list, max_val
 
 
     def make_plots(self):
@@ -94,7 +99,11 @@ class MultiqcModule(BaseMultiqcModule):
             'marker_size': 2,
             'enableMouseTracking': False,
             'square': True,
-            'data_labels': self.data_labels
+            'data_labels': self.data_labels,
+            'xmin': 0,
+            'ymin': 0,
+            'xmax': self.max_coord,
+            'ymax': self.max_coord
         }
 
         self.add_section(
@@ -104,31 +113,31 @@ class MultiqcModule(BaseMultiqcModule):
             plot=scatter.plot(data=self.plot_data, pconfig=pconfig)
         )
 
-    def write_plot_html(self, plot_data, data_labels, vr):
-        pconfig = {
-            'id': 'mummerplot',
-            'title': 'nucmer: synteny plot',
-            # 'marker_line_colour': 'rgba(0,0,0,0)',
-            # 'marker_line_width': 0,
-            # 'marker_size': 2,
-            'enableMouseTracking': False,
-            'square': True,
-            'extra_series': {
-                'name': 'real_data',
-                'dashStyle': 'Dash',
-                'data': plot_data,
-                'lineWidth': 1,
-                'color': '#000000',
-                'marker': {'enabled': False},
-                'enableMouseTracking': False,
-                'showInLegend': False,
-            }
-        }
-        return linegraph.plot(data={'diag':{vr[0]:vr[0], vr[1]:vr[1]}}, pconfig=pconfig)
-
-    def draw_plots(self, plots_hmtl):
-        self.add_section(
-            anchor='Nucmer',
-            description='',
-            plot=plots_hmtl
-        )
+    # def write_plot_html(self, plot_data, data_labels, vr):
+    #     pconfig = {
+    #         'id': 'mummerplot',
+    #         'title': 'nucmer: synteny plot',
+    #         # 'marker_line_colour': 'rgba(0,0,0,0)',
+    #         # 'marker_line_width': 0,
+    #         # 'marker_size': 2,
+    #         'enableMouseTracking': False,
+    #         'square': True,
+    #         'extra_series': {
+    #             'name': 'real_data',
+    #             'dashStyle': 'Dash',
+    #             'data': plot_data,
+    #             'lineWidth': 1,
+    #             'color': '#000000',
+    #             'marker': {'enabled': False},
+    #             'enableMouseTracking': False,
+    #             'showInLegend': False,
+    #         }
+    #     }
+    #     return linegraph.plot(data={'diag':{vr[0]:vr[0], vr[1]:vr[1]}}, pconfig=pconfig)
+    #
+    # def draw_plots(self, plots_hmtl):
+    #     self.add_section(
+    #         anchor='Nucmer',
+    #         description='',
+    #         plot=plots_hmtl
+    #     )
