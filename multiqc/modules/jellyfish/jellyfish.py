@@ -5,6 +5,7 @@
 from __future__ import print_function
 
 import logging
+import re
 from os.path import splitext
 from multiqc.utils import config
 from multiqc.plots import linegraph, scatter
@@ -96,6 +97,7 @@ class MultiqcModule(BaseMultiqcModule):
         data_labels = []
         name_pairs = itertools.combinations(self.jellyfish_count_data.keys(), 2)
         max_value = 0
+        kmer_pattern = re.compile('[ACTG]+$')
         for n in name_pairs:
             cur_name = ' vs '.join(n)
             cur_plot_data = {cur_name: [
@@ -105,7 +107,7 @@ class MultiqcModule(BaseMultiqcModule):
             # TODO: finishing addition of kmer distance to general stats table as soon as I find out how to easily define which file the reference file is...
             # self.kmer_distance_dict[n] = sum([abs(km['x'] - km['y']) for km in cur_plot_data[cur_name]])
             plot_data.append(cur_plot_data)
-            data_labels.append({'name': cur_name,
+            data_labels.append({'name': re.search(kmer_pattern, cur_name).group(0),
                                 'xlab': splitext(n[0])[0].replace('_', ' '),
                                 'ylab': splitext(n[1])[0].replace('_', ' ')})
             cur_max_value = max([pd['x'] for pd in cur_plot_data[cur_name]])
