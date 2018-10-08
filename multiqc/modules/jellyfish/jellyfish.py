@@ -97,7 +97,8 @@ class MultiqcModule(BaseMultiqcModule):
         name_pairs = itertools.combinations(self.jellyfish_count_data.keys(), 2)
         max_value = 0
         for n in name_pairs:
-            cur_name = ' vs '.join(n)
+            n_clean = [splitext(ni)[0].replace('_', ' ') for ni in n]
+            cur_name = ' vs '.join(n_clean)
             cur_plot_data = {cur_name: [
                 {'x': self.jellyfish_count_data[n[0]][kmer],
                  'y': self.jellyfish_count_data[n[1]][kmer],
@@ -106,8 +107,8 @@ class MultiqcModule(BaseMultiqcModule):
             # self.kmer_distance_dict[n] = sum([abs(km['x'] - km['y']) for km in cur_plot_data[cur_name]])
             plot_data.append(cur_plot_data)
             data_labels.append({'name': cur_name,
-                                'xlab': splitext(n[0])[0].replace('_', ' '),
-                                'ylab': splitext(n[1])[0].replace('_', ' ')})
+                                'xlab': n_clean[0],
+                                'ylab': n_clean[1]})
             cur_max_value = max([pd['x'] for pd in cur_plot_data[cur_name]])
             max_value = max(max_value, cur_max_value)
 
