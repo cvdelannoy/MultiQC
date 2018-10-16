@@ -250,10 +250,10 @@ module_order:
     - mummerplot:
         module_tag:
             - assembler_benchmark
-    - ab_cpu_times:
+    - minimap2:
         module_tag:
             - assembler_benchmark
-    - nucmer:
+    - ab_cpu_times:
         module_tag:
             - assembler_benchmark
 

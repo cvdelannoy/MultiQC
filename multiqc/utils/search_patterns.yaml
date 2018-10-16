@@ -18,8 +18,8 @@ ab_read_quality/nanostats:
     fn: 'nanostats.txt'
 ab_cpu_times:
     fn: '*.bm'
-nucmer:
-    fn: '*.coords'
+minimap2:
+    fn: 'all_alignments_*.tsv'
 
 mummerplot/fplot:
     fn: '*.fplot'

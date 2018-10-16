@@ -71,7 +71,7 @@ setup(
             'ab_read_quality = multiqc.modules.ab_read_quality:MultiqcModule',
             'ab_cpu_times = multiqc.modules.ab_cpu_times:MultiqcModule',
             'quast_synteny = multiqc.modules.quast_synteny:MultiqcModule',
-            'nucmer = multiqc.modules.nucmer:MultiqcModule',
+            'minimap2 = multiqc.modules.minimap2:MultiqcModule',
             'adapterRemoval = multiqc.modules.adapterRemoval:MultiqcModule',
             'afterqc = multiqc.modules.afterqc:MultiqcModule',
             'bamtools = multiqc.modules.bamtools:MultiqcModule',

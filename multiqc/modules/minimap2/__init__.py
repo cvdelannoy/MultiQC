@@ -1,2 +1,2 @@
 from __future__ import absolute_import
-from .nucmer import MultiqcModule
+from .minimap2 import MultiqcModule
