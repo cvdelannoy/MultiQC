@@ -48,7 +48,7 @@ class MultiqcModule(BaseMultiqcModule):
             htmltxt = ["<h4>"+ pl.replace("_", " ") +"</h4>" + pipeline['description'], ""]
             version_list = ['<b>Included tools:</b><ul>']
             for tool in pipeline['versions']:
-                version_list.append("<li>" + tool + " (version: " + pipeline['versions'][tool] + ") </li>")
+                version_list.append("<li>" + tool + " (version: " + str(pipeline['versions'][tool]) + ") </li>")
             version_list.append("</ul>")
             htmltxt.append(''.join(version_list))
             command = self.commands.get(pl)
