@@ -60,10 +60,10 @@ class MultiqcModule(BaseMultiqcModule):
             x_start, y_start, _ = line_start.split(' ')
             x_stop, y_stop, _ = line_stop.split(' ')
             x_start = int(x_start); y_start = int(y_start); x_stop = int(x_stop); y_stop = int(y_stop)
-            if x_start == x_stop:
-                continue
+            if x_start == x_stop: continue
             dydx = float(y_start - y_stop) / float(x_start - x_stop)
             x_points = list(range(x_start, x_stop, step_size))
+            if len(x_points) == 0: continue
             if x_points[-1] != x_stop:  # ensure endpoint is always there
                 x_points.append(x_stop)
             y_points = [0] * len(x_points)

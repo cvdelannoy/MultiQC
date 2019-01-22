@@ -34,7 +34,7 @@ class MultiqcModule(BaseMultiqcModule):
         self.make_plots()
 
     def plotfile_to_list(self, pf):
-        step_size = 10000
+        step_size = 5000
         lines_dict = {}
         lines_list = []
         points_list = []
