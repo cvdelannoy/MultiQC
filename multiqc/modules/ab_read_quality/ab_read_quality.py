@@ -28,10 +28,10 @@ class MultiqcModule(BaseMultiqcModule):
         self.nanostats_summary = OrderedDict()
         for f in self.find_log_files('ab_read_quality/nanostats'):
             self.parse_nanostats_summary(f)
-        if len(self.nanostats_summary) == 0:
-            raise UserWarning
-        else:
-            log.info("found nanostats file")
+        # if len(self.nanostats_summary) == 0:
+        #     raise UserWarning
+        # else:
+        #     log.info("found nanostats file")
 
         # Fuse summary dicts
         self.ab_read_quality_measures = OrderedDict()

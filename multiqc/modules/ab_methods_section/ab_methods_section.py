@@ -64,7 +64,7 @@ class MultiqcModule(BaseMultiqcModule):
                                        "{mappy}) in Python3.").format(flowcell=self.publication_info['flowcell'],
                                                               kit=self.publication_info['kit'],
                                                               basecaller=self.publication_info['basecaller'].replace('_', ' '),
-                                                              nanoplot=self.analysis_tool_versions['Nanoplot'],
+                                                              nanoplot=self.analysis_tool_versions.get('Nanoplot', 'Not performed; requires fastq reads'),
                                                               mappy=self.analysis_tool_versions['Mappy'])
         out_dict['assembly_quality'] = ("Produced assemblies were analyzed and compared on continuity and agreement "
                                         "with the reference genome. Quast (version: {quast}) was used to determine a "
