@@ -100,7 +100,7 @@ class MultiqcModule(BaseMultiqcModule):
         elif len(flist) == 0:
             log.error('No publication info file found!')
             return
-        self._publication_info = yaml.load(flist[0]['f'])
+        self._publication_info = yaml.full_load(flist[0]['f'])
 
     @analysis_tool_versions.setter
     def analysis_tool_versions(self, f):
@@ -112,7 +112,7 @@ class MultiqcModule(BaseMultiqcModule):
         if len(flist) == 0:
             log.error('No analysis tool versions file found!')
             return
-        self._analysis_tool_versions = yaml.load(flist[0]['f'])
+        self._analysis_tool_versions = yaml.full_load(flist[0]['f'])
 
     def parse_logfile(self, f):
         """
@@ -122,7 +122,7 @@ class MultiqcModule(BaseMultiqcModule):
         if info_match is None:
             log.warning('no methods information found in {}, skipping').format(f['fn'])
         else:
-            self.pipelines[f['s_name']] = yaml.load(info_match.group(0))
+            self.pipelines[f['s_name']] = yaml.full_load(info_match.group(0))
 
     def parse_cmdfile(self, f):
         """

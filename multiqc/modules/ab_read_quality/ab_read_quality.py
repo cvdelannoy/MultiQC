@@ -63,7 +63,7 @@ class MultiqcModule(BaseMultiqcModule):
             log.error('No alignment summary file found!')
             raise UserWarning
         out_dict = dict()
-        f_dict = yaml.load(f_list[0]['f'])
+        f_dict = yaml.full_load(f_list[0]['f'])
         basecount_cats = ['matches', 'mismatches', 'deletions', 'insertions']
         f_dict_basecounts = {bc: f_dict[bc] for bc in basecount_cats}
         block_len = sum(f_dict_basecounts.values()) * 1.0
@@ -79,7 +79,7 @@ class MultiqcModule(BaseMultiqcModule):
 
     #
     # def parse_minimap2_summary(self, f):
-    #     f_dict = yaml.load(f['f'])
+    #     f_dict = yaml.full_load(f['f'])
     #     block_len = sum(f_dict.values()) * 1.0
     #     if block_len == 0:
     #         block_len = 0.000000001  # prevent breaking, but very ugly
@@ -90,7 +90,7 @@ class MultiqcModule(BaseMultiqcModule):
     
     def parse_nanostats_summary(self, f):
         f_clean = f['f'].replace('\t', ' ').split('\n')[1:5]
-        self.nanostats_summary = yaml.load('\n'.join(f_clean))
+        self.nanostats_summary = yaml.full_load('\n'.join(f_clean))
 
 
     def fuse_summaries(self):
